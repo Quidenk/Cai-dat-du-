@@ -66,12 +66,12 @@ exports.findOne = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     // res.send({ messsge: "update handler" });
 
-    if (Object.keys(req.body).length ===0 ) {
+    if (Object.keys(req.body).length == 0 ) {
         return next( new ApiError(400, "Data to update can not be empty"));
     }
 
     try {
-        const contactService = new ContactService(MongoDb.client);
+        const contactService = new ContactService(MongoDB.client);
         const document = await contactService.update(req.params.id, req.body);
         if (!document) {
             return next(new ApiError(404, "Contact not found"));
@@ -109,7 +109,7 @@ exports.deleteAll = async (req, res, next) => {
 
     try {
         const contactService = new ContactService(MongoDB.client);
-        const document = await contactService.deleteAll();
+        const deletedCount = await contactService.deleteAll();
         return res.send({
             message: `${deletedCount} contacts were deleted successfully`,
         });
@@ -125,7 +125,7 @@ exports.findAllFavorite = async (req, res, next) => {
 
     try {
         const contactService = new ContactService(MongoDB.client);
-        const document = await contactService.findFavorite();
+        const document = await contactService.findAllFavorite();
         return res.send(document);
     } catch (error) {
         return next(
